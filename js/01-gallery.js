@@ -13,31 +13,26 @@ const newEl = galleryItems.reduce((acc, picture) => acc + `<div class="gallery__
 data-source="${picture.original}"
 alt="${picture.description}"/>
 </a>
-</div>`,``)
+</div>`,``);
 listObj.images.insertAdjacentHTML(`beforeend`, newEl);
- const arrGallery = document.querySelector(".gallery")
+ const arrGallery = document.querySelector(".gallery");
  console.log(arrGallery);
+//  ------ додаємо івентлістенер на галерею-----
  arrGallery.addEventListener("click", showGallery);
- 
-function showGallery (evt){
+ function showGallery (evt)
+{
 const modalImg = evt.target;
 evt.preventDefault();
 if (modalImg === evt.currentTarget) return
-
+// --- ініціюємо бібліотеку----
 const instance = basicLightbox.create(`   
-    <img src="${modalImg.dataset.source}"/>
-    `)
-instance.show();
-
-evt.currentTarget.addEventListener("keydown", event => {if (event.key === "Escape")
-    {instance.close();
-
-    } else {return}
-  });
-evt.currentTarget.removeEventListener("keydown", event => {if (event.key === "Escape")
-    {instance.close();
-     } else {return}
-  });
-  console.log(event.target)
+    <img src="${modalImg.dataset.source}"/>`,
+    // ------- додаємо об'єкт для модалки з івентлістерером-------
+    {
+    onShow: () => {document.addEventListener("keydown", escKeyDown)},
+    onClose: () => {document.removeEventListener("keydown", escKeyDown)}
+    });
+   instance.show();
+   function escKeyDown(event) {if (event.key === "Escape") {instance.close()};
+  }
 }
-
